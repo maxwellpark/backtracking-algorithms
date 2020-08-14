@@ -35,17 +35,17 @@ def next_empty_cell():
 
 
 def is_valid(digit, coords):
-    # Check row (x,i) 
+    # Row 
     for i in range(len(grid)):
         if grid[coords[0]][i] == digit and coords[1] != i:
             return False
 
-    # Check column (i,y) 
+    # Column 
     for i in range(len(grid)):
         if grid[i][coords[1]] == digit and coords[0] != i:
             return False
 
-    # Check subgrid 
+    # Subgrid  
     subgrid_x = coords[1] // 3
     subgrid_y = coords[0] // 3
 
@@ -54,3 +54,30 @@ def is_valid(digit, coords):
             if grid[i][j] == digit and (i,j) != coords:
                 return False
     return True
+
+def solve_grid():
+    next_empty = next_empty_cell() 
+	
+    if not next_empty:
+        return True
+    else:
+        row, col = next_empty
+
+    for i in range(1,10):
+        if is_valid(i, (row, col)):
+            grid[row][col] = i
+
+            if solve_grid():
+                return True
+
+            grid[row][col] = 0
+            
+    return False
+
+# Entry point
+print("Unsolved grid: \n") 
+render_grid()
+solve_grid()
+print("-" * 25)
+print("Solved grid: \n")
+render_grid() 
